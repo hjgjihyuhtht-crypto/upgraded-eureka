@@ -1,0 +1,2 @@
+Fonte: https://github.com/structureio/OpenNI2 commit 3b787cc8b06e4129d1c5d7daf99e04413ac42266 (Apache-2.0). Subconjunto: núcleo libOpenNI2 + XnLib + LibJPEG.
+Alteração local: OniPlatform.h e XnPlatform.h aceitam __aarch64__ (usa o cabeçalho Linux-x86, que é genérico para gcc).

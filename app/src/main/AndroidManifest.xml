@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- O Kinect só funciona em aparelhos com USB Host (OTG). -->
+    <uses-feature android:name="android.hardware.usb.host" android:required="true" />
+
+    <!-- Nenhuma permissão de internet: o app funciona inteiramente offline. -->
+    <!-- O jogo usa OpenGL ES 2.0 (raylib). -->
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+
+    <application
+        android:name=".K3DApp"
+        android:allowBackup="false"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.K3D">
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Ao conectar um Kinect, o Android oferece abrir este app e já concede a permissão. -->
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/kinect_device_filter" />
+        </activity>
+
+        <!-- Jogo Expedição Ativa: raylib numa NativeActivity (libk3d_native.so), em processo próprio
+             para cada partida começar do zero e uma falha no jogo não derrubar o app. -->
+        <activity
+            android:name=".game.GameActivity"
+            android:process=":game"
+            android:exported="false"
+            android:label="Expedição Ativa"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard|navigation|uiMode|density"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="k3d_native" />
+        </activity>
+    </application>
+</manifest>

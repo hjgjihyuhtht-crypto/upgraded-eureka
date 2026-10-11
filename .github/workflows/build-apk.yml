@@ -1,0 +1,49 @@
+# Compila o APK de depuração e roda os testes no GitHub, sem precisar de PC.
+# Após o push, baixe o APK em: Actions > (execução) > Artifacts > kinect3dstudio-debug-apk
+name: Build APK
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # O runner já traz o Android SDK em $ANDROID_HOME. Não usamos a ação
+      # android-actions/setup-android: ela tenta instalar o pacote "tools",
+      # que não existe nas versões novas do sdkmanager e derruba o build.
+      - name: Instalar NDK, CMake e plataforma Android
+        run: |
+          SDKM="$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)"
+          echo "Usando $SDKM"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" --install "ndk;27.2.12479018" "cmake;3.22.1" "platforms;android-35" "build-tools;35.0.0" > /dev/null
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Verificar código nativo no host (C/C++ + teste de fumaça)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq cmake g++ >/dev/null
+          sudo mkdir -p /dev/bus/usb/001 && sudo touch /dev/bus/usb/001/001
+          bash scripts/check_native_host.sh
+
+      - name: Testes unitários
+        run: bash ./gradlew --no-daemon testDebugUnitTest
+
+      - name: Compilar APK
+        run: bash ./gradlew --no-daemon assembleDebug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kinect3dstudio-debug-apk
+          path: app/build/outputs/apk/debug/*.apk

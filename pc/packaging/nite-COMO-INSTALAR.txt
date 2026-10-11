@@ -1,0 +1,23 @@
+NiTE2 — rastreamento de esqueleto (opcional, só Linux)
+======================================================
+
+O Kinect 3D Studio já vem com o OpenNI2 e o driver Freenect. O NiTE2 é
+proprietário (PrimeSense/Apple, descontinuado em 2014), então não pode ir
+junto no pacote. Se você tiver uma cópia do NiTE 2.2 para Linux:
+
+  1. Abra a pasta NiTE-Linux-x64-2.2/Redist do seu NiTE.
+  2. Copie TUDO o que está nela para esta pasta "nite":
+        nite/libNiTE2.so
+        nite/NiTE.ini
+        nite/NiTE2/        (pasta de dados: s.dat, h.dat, ...)
+  3. Abra o programa. No menu principal aparece "Rastreamento: NiTE2".
+
+Outras pastas que o programa também procura:
+  - a pasta da variável NITE2_PATH (ou NITE2_REDIST64, criada pelo
+    install.sh do NiTE);
+  - ~/.local/share/kinect3dstudio/nite
+  - ~/NiTE-Linux-x64-2.2/Redist  e  /opt/NiTE-Linux-x64-2.2/Redist
+
+Sem o NiTE (ou se ele falhar) o programa usa o rastreador próprio por
+silhueta, que funciona com qualquer Kinect v1.
+Use o NiTE para Linux x64 (o programa deste pacote é x64).

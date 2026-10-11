@@ -1,0 +1,2 @@
+Fonte: https://github.com/OpenKinect/libfreenect commit 09a1f098040d00e6070c18174904547ec31d2774 (Apache-2.0 / GPL2): OpenNI2-FreenectDriver + wrappers/cpp/libfreenect.hpp
+Alterações locais em DeviceDriver.cpp: invólucro SafeDriver (sem exceção atravessando a API C) e log do libfreenect em WARNING.

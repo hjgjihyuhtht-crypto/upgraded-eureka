@@ -1,0 +1,2 @@
+libusb d52e355 (v1.0.27)
+libfreenect 09a1f09 (master)

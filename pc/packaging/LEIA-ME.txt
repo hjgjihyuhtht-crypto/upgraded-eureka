@@ -1,0 +1,118 @@
+KINECT 3D STUDIO PARA PC
+========================
+
+O programa espera o Kinect ser conectado. Quando ele aparece, pergunta se
+você quer VER OS SENSORES ou JOGAR a Expedição Ativa (5 jogos originais de
+movimento com o corpo inteiro).
+
+Kinect suportado: Kinect v1 (Xbox 360, modelos 1414 e 1473) e Kinect for
+Windows v1. O Kinect v2 (Xbox One) e o Azure Kinect são detectados, mas não
+são suportados.
+
+Requisitos: Windows 10 ou 11 (64 bits), placa de vídeo com OpenGL 3.3,
+porta USB 2.0 ou 3.0 livre, adaptador de energia do Kinect (fonte 12 V).
+
+
+1. PRIMEIRA VEZ: INSTALAR O DRIVER (WINDOWS)
+--------------------------------------------
+O Windows não traz um driver que deixe programas comuns lerem o Kinect.
+Isso é feito uma única vez com o Zadig (gratuito):
+
+  a) Ligue a fonte do Kinect na tomada e conecte o USB no computador.
+  b) Baixe o Zadig em https://zadig.akeo.ie e abra.
+  c) Menu "Options" > marque "List All Devices".
+  d) Na lista, escolha "Xbox NUI Camera".
+     Do lado direito da seta verde, escolha "libusbK".
+     Clique em "Replace Driver" (ou "Install Driver") e espere terminar.
+  e) Repita para "Xbox NUI Motor" (se aparecer na lista).
+     "Xbox NUI Audio" não precisa.
+  f) Abra KinectStudio.exe.
+
+Se "libusbK" não funcionar, repita escolhendo "WinUSB".
+Se você tinha o Kinect for Windows SDK instalado, o Zadig troca o driver só
+desses dispositivos. Para voltar ao driver da Microsoft: Gerenciador de
+Dispositivos > clique com o botão direito no dispositivo > Desinstalar.
+
+
+LINUX: em vez do Zadig, instale a regra de permissão uma vez:
+  sudo cp 51-kinect.rules /etc/udev/rules.d/
+  sudo udevadm control --reload && sudo udevadm trigger
+e abra com ./kinect-studio.sh
+Se o módulo gspca_kinect do sistema pegar o Kinect antes:
+  sudo modprobe -r gspca_kinect
+
+LINUX, OPCIONAL: ESQUELETO COM OpenNI2 + NiTE2
+O pacote para Linux já traz o OpenNI2 e o driver Freenect (pasta OpenNI2/).
+O NiTE2 é proprietário e descontinuado, por isso não vem junto: se você
+tiver o NiTE-Linux-x64-2.2, copie o conteúdo da pasta Redist dele para a
+pasta "nite" (instruções em nite/COMO-INSTALAR.txt). Com o NiTE2 o programa
+usa as articulações medidas (mãos, cabeça, quadril) e a separação de
+pessoas do NiTE. O botão "Rastreamento" no menu principal troca entre
+NiTE2 e o rastreador próprio por silhueta. A tela "Ver sensores" usa
+sempre o libfreenect (o NiTE pausa enquanto ela está aberta).
+
+
+2. COMO JOGAR
+-------------
+- Fique de 2 a 3 metros do sensor, com o corpo inteiro aparecendo.
+- Nos menus: levante a mão e SEGURE o cursor sobre um botão por ~1 segundo.
+  Mouse e teclado também funcionam sempre.
+- Pausa: levante as duas mãos acima da cabeça por 1,5 s (ou tecla Esc).
+- Dois jogadores: no menu "Jogar", toque em "Jogadores: 2" e fiquem lado a lado.
+
+Os jogos:
+  Corredeira      dê passos ou incline o corpo para guiar o bote; pule para saltar.
+  Rebote          rebata as bolas com o corpo para quebrar os blocos.
+  Esquiva         pule barras baixas, abaixe nas altas, desvie das paredes.
+  Aquário         tape as rachaduras do vidro com mãos, pés ou cabeça.
+  Gravidade Zero  bata os braços para subir e estoure as bolhas.
+
+Aventura: 5 expedições com 3 aventuras cada. Medalha nas três abre a próxima.
+Medalhas: bronze, prata, ouro e platina. Há 20 emblemas para conquistar.
+Fotos dos melhores momentos são tiradas sozinhas.
+
+
+3. SEM KINECT (SIMULAÇÃO)
+-------------------------
+"Jogar sem Kinect" usa um boneco simulado, sempre identificado na tela
+como SIMULAÇÃO. Controles:
+  Setas ou A/D  andar para os lados       Q / E   inclinar
+  Espaço        pular                     S ou C  abaixar
+  F ou botão direito do mouse: bater os braços
+  Mouse         move a mão direita (segure Shift para as duas mãos)
+
+Também dá para arrastar uma gravação .k3drec (feita no programa ou no app
+Android Kinect 3D Studio) para a janela e reproduzi-la.
+
+
+4. ONDE FICAM OS ARQUIVOS
+-------------------------
+Documentos\Kinect 3D Studio\Fotos       fotos das partidas (PNG)
+Documentos\Kinect 3D Studio\Capturas    quadros capturados na tela de sensores
+Documentos\Kinect 3D Studio\Gravacoes   gravações .k3drec
+%APPDATA%\Kinect3DStudio\perfil.txt     medalhas, emblemas e recordes
+
+Nada é enviado para a internet.
+
+
+5. PROBLEMAS COMUNS
+-------------------
+"Falta energia na câmera do Kinect"  a fonte de 12 V não está ligada.
+"Kinect encontrado, mas não abriu"   instale o driver (item 1) e reconecte.
+Imagem trava ou poucos quadros       use outra porta USB, sem hub; evite
+                                     dividir a porta com webcam ou HD externo.
+"Sua cabeça está fora da imagem"     afaste-se ou incline o Kinect para cima
+                                     (botões na tela Sensores, modelo 1414).
+
+
+6. LICENÇAS
+-----------
+libfreenect (OpenKinect)  Apache 2.0
+OpenNI2 (só Linux)        Apache 2.0
+libusb                    LGPL 2.1 (libusb-1.0.dll, pode ser substituída)
+raylib                    zlib
+Fonte Poppins             SIL Open Font License 1.1
+Os textos completos estão na pasta "licencas".
+
+Expedição Ativa é um jogo original deste projeto. Não tem relação com
+nenhum jogo da Microsoft nem usa nomes, personagens, músicas ou imagens deles.

@@ -1,0 +1,54 @@
+# Compila a versão para PC (Windows e Linux), roda os testes e publica os pacotes.
+# Baixe em: Actions > (execução) > Artifacts > KinectStudio-Windows / KinectStudio-Linux
+name: Build PC
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Dependências
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake g++ git xorg-dev libgl1-mesa-dev xvfb zip > /dev/null
+
+      - name: Linux (compila + testes)
+        run: bash pc/scripts/build_linux.sh
+
+      - name: Jogo em modo Android no PC (ponte com a GameActivity)
+        run: |
+          mkdir -p "$RUNNER_TEMP/and/int" "$RUNNER_TEMP/and/ext"
+          cd build-pc-linux/build
+          AND_INTERNAL="$RUNNER_TEMP/and/int" AND_EXTERNAL="$RUNNER_TEMP/and/ext" \
+            xvfb-run -a -s "-screen 0 1280x720x24" timeout 120 ./android_mode_test
+
+      - name: Windows (compilação cruzada com llvm-mingw)
+        run: bash pc/scripts/build_windows.sh
+
+      - name: Capturas de tela (simulação, sem Kinect)
+        run: |
+          mkdir -p shots
+          sudo mkdir -p /dev/bus/usb/001 && sudo touch /dev/bus/usb/001/001
+          cd build-pc-linux/build
+          HOME=$RUNNER_TEMP xvfb-run -a -s "-screen 0 1280x720x24" timeout 600 ./KinectStudio --shots "$GITHUB_WORKSPACE/shots" || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KinectStudio-Windows
+          path: dist/KinectStudio-Windows.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KinectStudio-Linux
+          path: dist/KinectStudio-Linux.tar.gz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: capturas-de-tela
+          path: shots/

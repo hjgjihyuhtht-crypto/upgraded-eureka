@@ -1,0 +1,10 @@
+.gradle/
+build/
+build-host-native/
+local.properties
+.idea/
+*.iml
+app/.cxx/
+captures/
+build-pc-*/
+dist/

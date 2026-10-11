@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- VID 0x045E (Microsoft). Valores em decimal. -->
+<resources>
+    <!-- Kinect v1 Xbox 360: câmera 0x02AE, motor 0x02B0 -->
+    <usb-device vendor-id="1118" product-id="686" />
+    <usb-device vendor-id="1118" product-id="688" />
+    <!-- Kinect for Windows v1: câmera 0x02BF -->
+    <usb-device vendor-id="1118" product-id="703" />
+    <!-- Kinect v2: listado só para mostrar o motivo de não ser suportado -->
+    <usb-device vendor-id="1118" product-id="708" />
+    <usb-device vendor-id="1118" product-id="728" />
+</resources>
